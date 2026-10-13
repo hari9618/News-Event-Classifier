@@ -1,0 +1,41 @@
+id,predicted,confidence,category,reason
+01,YES,HIGH,physical damage,"Fire caused property damage and injuries, a clear insurable loss event"
+02,NO,HIGH,financial or corporate news,"Share price drop is financial news, not an actual loss event"
+03,YES,HIGH,transport/asset casualty,Vessel grounding causes hull/salvage loss potential
+04,NO,HIGH,planned activity,"Only a future strike ballot announced, no actual loss occurred"
+05,YES,HIGH,physical damage,"Flooding caused water damage to industrial estates, indicating physical loss"
+06,NO,HIGH,forecast or warning,"Snippet reports a future climate study, not an actual loss event"
+07,NO,HIGH,forecast or warning,"It only describes a fire warning forecast, no actual damage or loss yet"
+08,YES,HIGH,business interruption,"Software fault caused system outage and flight cancellations, a clear operational interruption."
+09,YES,LOW,physical damage,"Eyewitness reports a partial mine collapse causing property damage, potentially leading to insurance loss"
+10,NO,HIGH,financial or corporate news,Consultation on regulations is not an actual loss-causing event
+11,YES,HIGH,hazard already struck,Earthquake occurred; potential physical damage and loss are evident
+12,NO,HIGH,financial or corporate news,"Funding announcement, no actual loss event described"
+13,YES,HIGH,physical damage,Fire caused damage to the factory and will likely lead to property and business interruption claims
+14,NO,HIGH,forecast or warning,"The snippet only forecasts a future hurricane, no actual damage or loss yet"
+15,NO,HIGH,precaution without confirmed loss,Pipeline shutdown was precautionary; no confirmed leak or damage
+16,YES,HIGH,physical damage,"Storms caused transmission lines to fall, creating confirmed physical damage"
+17,NO,HIGH,historical legal outcome,"Court ruling on past contamination, not a new loss event"
+18,YES,HIGH,transport/asset casualty,"Emergency landing due to engine fire warning likely caused aircraft damage, a hull claim."
+19,NO,HIGH,forecast or warning,"Snippet is a forecast of premium changes, not an actual loss event"
+20,YES,HIGH,business interruption,"Ransomware halted plant production, causing operational interruption and potential loss"
+21,NO,HIGH,no meaningful loss,"Snow closed roads but no damage, injury, or loss reported"
+22,YES,HIGH,physical damage,"Building collapse caused damage and missing workers, indicating loss"
+23,NO,HIGH,forecast or warning,"It is a seasonal outlook prediction, not an actual event causing loss"
+24,NO,HIGH,no meaningful loss,"Routine flaring reported with no damage, injury, or loss mentioned"
+25,NO,HIGH,no meaningful loss,"Drought caused restrictions but no reported damage, injury, or loss"
+26,YES,HIGH,transport/asset casualty,Engine failure and tow of ferry constitute a transport asset casualty
+27,YES,HIGH,physical damage,"Wildfires caused destruction of homes, a clear physical damage event"
+28,NO,HIGH,financial or corporate news,"Bank policy change, no actual loss event reported"
+29,YES,HIGH,physical damage,"Gas explosion caused damage to two shops, indicating property loss"
+30,NO,HIGH,planned activity,"Scheduled crane software upgrade overran, causing a planned operational interruption"
+31,YES,HIGH,physical damage,"Hailstorms caused damage to vehicles and roofs, creating property loss"
+32,NO,HIGH,financial or corporate news,"Snippet describes research, not an actual loss event"
+33,NO,HIGH,precaution without confirmed loss,"Cracks observed but no confirmed damage or injury, only precautionary evacuation"
+34,NO,HIGH,financial or corporate news,"Snippet reports reinsurance price rise, not an actual loss event"
+35,YES,HIGH,transport/asset casualty,"Train derailment caused fire and evacuation, indicating property damage and asset loss"
+36,NO,HIGH,financial or corporate news,"It's a corporate bankruptcy filing, not an actual loss event"
+37,YES,HIGH,bodily injury,"Scaffolding collapse caused injuries, a real event leading to potential claims"
+38,NO,HIGH,no meaningful loss,Database exposure reported but no misuse or loss detected
+39,YES,LOW,bodily injury,"Reported flash floods caused fatalities and building damage, indicating bodily injury and physical loss."
+40,NO,HIGH,financial or corporate news,"Announcement of future requirements, no actual loss event"

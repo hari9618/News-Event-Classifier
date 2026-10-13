@@ -1,0 +1,41 @@
+id,predicted,confidence,category,reason
+01,YES,HIGH,Property,Fire destroyed a warehouse causing damage and injuries
+02,NO,HIGH,Market,"Describes a stock price move, not an insurable loss event."
+03,YES,HIGH,Marine,"Grounding of a vessel can cause hull, cargo and environmental losses"
+04,YES,HIGH,Business Interruption,A potential strike can cause operational shutdown and related insurance claims
+05,YES,HIGH,Property,Flooding caused water damage to industrial facilities
+06,NO,HIGH,Climate Change,"It reports a future study, not an actual event"
+07,NO,HIGH,Fire,"Only a warning, no actual fire reported"
+08,YES,HIGH,Business Interruption,Flight cancellations from a software fault can trigger compensation and revenue loss claims
+09,YES,HIGH,Industrial Accident,Mine collapse can cause property and business interruption losses
+10,NO,HIGH,Regulatory/Policy,"Announcement of future regulations, not an actual loss event"
+11,YES,HIGH,Natural Disaster - Earthquake,Significant earthquake and tsunami risk can cause property and casualty losses
+12,NO,HIGH,Funding/Business,"Describes financing, not a loss event"
+13,YES,HIGH,Property,"Factory fire caused damage and prolonged shutdown, leading to insured losses"
+14,YES,HIGH,Natural catastrophe,Potential hurricane could cause insured property damage
+15,YES,HIGH,Environmental,Pressure anomaly in pipeline could lead to leak and related losses
+16,YES,HIGH,Storm,Severe storms caused power outages and potential property damage
+17,YES,HIGH,Environmental liability,Court judgment for contamination could trigger insurance claims
+18,YES,HIGH,Aviation,"Engine fire warning could cause aircraft or cargo damage, leading to insurance claims"
+19,NO,HIGH,Cyber,"The snippet forecasts premium changes, not a specific loss event."
+20,YES,HIGH,Cyber/Business Interruption,"Ransomware halted production, likely causing insured business interruption losses"
+21,YES,HIGH,Weather,"Heavy snowfall can cause accidents, property damage, and business interruption"
+22,YES,HIGH,Construction accident,Building collapse causes property and liability losses
+23,NO,HIGH,Weather Forecast,"It is a prediction, not an actual event causing loss"
+24,YES,HIGH,Property/Environmental,"Flaring can cause fire, equipment damage or environmental liability"
+25,YES,HIGH,Agriculture,"Drought can damage crops, leading to agricultural insurance claims"
+26,YES,HIGH,Marine/Transportation,Engine failure and tow could cause hull or liability losses
+27,YES,HIGH,Property,Wildfires destroyed homes causing property damage
+28,NO,HIGH,Regulatory/Policy,"Policy change, no direct loss event"
+29,YES,HIGH,Property Damage,"A gas explosion destroyed two shops, causing likely insured losses"
+30,YES,HIGH,Business interruption,Terminal shutdown can trigger business interruption losses
+31,YES,HIGH,Property,Hail damage to vehicles and roofs will generate insurance claims
+32,NO,HIGH,Research/Methodology,"Describes a study, not an actual loss‑causing event"
+33,YES,HIGH,Dam failure,Cracked dam and evacuations indicate risk of breach and flooding causing losses
+34,NO,HIGH,Pricing,"It reports price changes, not an actual loss event"
+35,YES,HIGH,Transportation Accident,Chemical train derailment with fire can cause property and liability losses
+36,NO,HIGH,,"Filing for administration is a financial distress event, not a direct insurable loss"
+37,YES,HIGH,Construction accident,"Scaffolding collapse caused injuries, leading to potential liability and workers' compensation claims"
+38,YES,HIGH,Cyber,Potential data breach liability could trigger a claim
+39,YES,HIGH,Flood,"Flash floods caused building damage and fatalities, leading to potential insurance claims"
+40,NO,HIGH,Regulatory/Policy,"Announcement of requirements, no loss event described"

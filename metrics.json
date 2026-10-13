@@ -1,0 +1,266 @@
+{
+  "LLM (rubric prompt)": {
+    "n": 40,
+    "tp": 18,
+    "fp": 0,
+    "fn": 2,
+    "tn": 20,
+    "accuracy": 0.95,
+    "precision": 1.0,
+    "recall": 0.9,
+    "f1": 0.9473684210526316,
+    "accuracy_high_conf": 0.9705882352941176,
+    "high_conf_correct": 33,
+    "high_conf_total": 34,
+    "accuracy_low_conf": 0.8333333333333334,
+    "low_conf_correct": 5,
+    "low_conf_total": 6,
+    "disagreements": [
+      {
+        "id": "25",
+        "mine": "YES",
+        "classifier": "NO",
+        "type": "false negative",
+        "reason": "Drought caused restrictions but no reported damage, injury, or loss",
+        "snippet": "A historic drought has left reservoir levels in northern Italy at 30% of capacity, prompting irrigation restrictions for farmers.",
+        "notes": {
+          "verdict": "Classifier is wrong",
+          "why": "The model invoked the 'no meaningful loss' clause, which requires the snippet to explicitly state there was no loss. Snippet 25 says nothing of the kind. It read the absence of a stated loss as a statement of no loss.",
+          "assessment": "Mine, clearly. The slow-onset clause is directly on point: the effects are already occurring, with reservoirs at 30% of capacity and irrigation restrictions in force. Drought with enforced restrictions is exactly what crop and parametric agricultural covers respond to.",
+          "tells_us": "A classifier error, with a secondary rubric problem. The slow-onset rule sits under 'Borderline cases' rather than in the YES list, so a reader working top-down meets 'no meaningful loss' first and stops there. Promoting it to a full YES bullet is the fix."
+        }
+      },
+      {
+        "id": "33",
+        "mine": "YES",
+        "classifier": "NO",
+        "type": "false negative",
+        "reason": "Cracks observed but no confirmed damage or injury, only precautionary evacuation",
+        "snippet": "A dam in Laos showed cracks after heavy rain and authorities evacuated downstream villages as a precaution; engineers are assessing the structure.",
+        "notes": {
+          "verdict": "Genuinely contested",
+          "why": "The model collapsed 'damage' into 'loss has crystallised'. Nothing has failed, engineers are still assessing, so it reached for the precaution clause.",
+          "assessment": "Mine, on the rubric as written: cracks are confirmed physical damage to an insured structure, and evacuation costs are already being incurred. But this is genuinely 50/50 and I am the least certain party here of the three.",
+          "tells_us": "A rubric gap. My rubric never defines whether 'damage' means damage to the asset (cracks qualify) or a resulting loss (nothing yet). Both readings are available in the text, which is why two careful readers split. It also argues for a WATCH tier instead of forcing a binary."
+        }
+      }
+    ]
+  },
+  "LLM (rubric v1, pre-amendment)": {
+    "n": 40,
+    "tp": 17,
+    "fp": 0,
+    "fn": 3,
+    "tn": 20,
+    "accuracy": 0.925,
+    "precision": 1.0,
+    "recall": 0.85,
+    "f1": 0.9189189189189189,
+    "accuracy_high_conf": 0.9705882352941176,
+    "high_conf_correct": 33,
+    "high_conf_total": 34,
+    "accuracy_low_conf": 0.6666666666666666,
+    "low_conf_correct": 4,
+    "low_conf_total": 6,
+    "disagreements": [
+      {
+        "id": "18",
+        "mine": "YES",
+        "classifier": "NO",
+        "type": "false negative",
+        "reason": "Emergency landing due to warning, no confirmed damage or injury reported",
+        "snippet": "A cargo plane made an emergency landing in Anchorage after an engine fire warning; the aircraft landed safely with no injuries.",
+        "notes": {
+          "verdict": "Resolved by the rubric amendment",
+          "why": "Two clauses applied at once: an aircraft asset casualty, and a precautionary response with no confirmed damage. The rubric gave no precedence rule, so the model had licence to pick either.",
+          "assessment": "Mine, but narrowly. An unscheduled engine-warning landing reliably produces a boroscope inspection, often an engine change, plus diversion and repositioning costs. Those are aviation claims and they do not depend on injuries.",
+          "tells_us": "A rubric gap rather than a model failure. This is also the one snippet whose label was unstable across three identical runs, because the rubric genuinely left the model on the fence. v2 now agrees with me, but I do not claim the amendment deterministically fixed it: one snippet at n=40 sits inside the measured noise. The precedence rule remains the real fix."
+        }
+      },
+      {
+        "id": "25",
+        "mine": "YES",
+        "classifier": "NO",
+        "type": "false negative",
+        "reason": "Drought caused restrictions but no reported damage, injury, or loss",
+        "snippet": "A historic drought has left reservoir levels in northern Italy at 30% of capacity, prompting irrigation restrictions for farmers.",
+        "notes": {
+          "verdict": "Classifier is wrong",
+          "why": "The model invoked the 'no meaningful loss' clause, which requires the snippet to explicitly state there was no loss. Snippet 25 says nothing of the kind. It read the absence of a stated loss as a statement of no loss.",
+          "assessment": "Mine, clearly. The slow-onset clause is directly on point: the effects are already occurring, with reservoirs at 30% of capacity and irrigation restrictions in force. Drought with enforced restrictions is exactly what crop and parametric agricultural covers respond to.",
+          "tells_us": "A classifier error, with a secondary rubric problem. The slow-onset rule sits under 'Borderline cases' rather than in the YES list, so a reader working top-down meets 'no meaningful loss' first and stops there. Promoting it to a full YES bullet is the fix."
+        }
+      },
+      {
+        "id": "33",
+        "mine": "YES",
+        "classifier": "NO",
+        "type": "false negative",
+        "reason": "Cracks observed but no confirmed failure, damage, or loss reported",
+        "snippet": "A dam in Laos showed cracks after heavy rain and authorities evacuated downstream villages as a precaution; engineers are assessing the structure.",
+        "notes": {
+          "verdict": "Genuinely contested",
+          "why": "The model collapsed 'damage' into 'loss has crystallised'. Nothing has failed, engineers are still assessing, so it reached for the precaution clause.",
+          "assessment": "Mine, on the rubric as written: cracks are confirmed physical damage to an insured structure, and evacuation costs are already being incurred. But this is genuinely 50/50 and I am the least certain party here of the three.",
+          "tells_us": "A rubric gap. My rubric never defines whether 'damage' means damage to the asset (cracks qualify) or a resulting loss (nothing yet). Both readings are available in the text, which is why two careful readers split. It also argues for a WATCH tier instead of forcing a binary."
+        }
+      }
+    ]
+  },
+  "LLM (no rubric, ablation)": {
+    "n": 40,
+    "tp": 20,
+    "fp": 8,
+    "fn": 0,
+    "tn": 12,
+    "accuracy": 0.8,
+    "precision": 0.7142857142857143,
+    "recall": 1.0,
+    "f1": 0.8333333333333333,
+    "accuracy_high_conf": 0.8235294117647058,
+    "high_conf_correct": 28,
+    "high_conf_total": 34,
+    "accuracy_low_conf": 0.6666666666666666,
+    "low_conf_correct": 4,
+    "low_conf_total": 6,
+    "disagreements": [
+      {
+        "id": "04",
+        "mine": "NO",
+        "classifier": "YES",
+        "type": "false positive",
+        "reason": "A potential strike can cause operational shutdown and related insurance claims",
+        "snippet": "Union representatives at a German auto plant announced a strike ballot for next month over pay.",
+        "notes": null
+      },
+      {
+        "id": "14",
+        "mine": "NO",
+        "classifier": "YES",
+        "type": "false positive",
+        "reason": "Potential hurricane could cause insured property damage",
+        "snippet": "A tropical depression formed in the Gulf of Mexico and is forecast to strengthen into a hurricane within 72 hours.",
+        "notes": null
+      },
+      {
+        "id": "15",
+        "mine": "NO",
+        "classifier": "YES",
+        "type": "false positive",
+        "reason": "Pressure anomaly in pipeline could lead to leak and related losses",
+        "snippet": "An oil pipeline in Alberta was shut down as a precaution after sensors detected a pressure anomaly; no leak has been confirmed.",
+        "notes": null
+      },
+      {
+        "id": "17",
+        "mine": "NO",
+        "classifier": "YES",
+        "type": "false positive",
+        "reason": "Court judgment for contamination could trigger insurance claims",
+        "snippet": "A court ordered a chemical company to pay $2.1B in damages over historical groundwater contamination claims.",
+        "notes": null
+      },
+      {
+        "id": "21",
+        "mine": "NO",
+        "classifier": "YES",
+        "type": "false positive",
+        "reason": "Heavy snowfall can cause accidents, property damage, and business interruption",
+        "snippet": "Heavy snowfall closed several Alpine passes overnight; no incidents were reported and roads reopened by morning.",
+        "notes": null
+      },
+      {
+        "id": "24",
+        "mine": "NO",
+        "classifier": "YES",
+        "type": "false positive",
+        "reason": "Flaring can cause fire, equipment damage or environmental liability",
+        "snippet": "A refinery in Louisiana reported a flaring event lasting several hours; the operator described it as routine and regulators were notified.",
+        "notes": null
+      },
+      {
+        "id": "30",
+        "mine": "NO",
+        "classifier": "YES",
+        "type": "false positive",
+        "reason": "Terminal shutdown can trigger business interruption losses",
+        "snippet": "A container terminal in Felixstowe suspended operations for a day due to a crane software upgrade that overran.",
+        "notes": null
+      },
+      {
+        "id": "38",
+        "mine": "NO",
+        "classifier": "YES",
+        "type": "false positive",
+        "reason": "Potential data breach liability could trigger a claim",
+        "snippet": "A software company disclosed that a misconfigured database briefly exposed customer records; it says no misuse has been detected.",
+        "notes": null
+      }
+    ]
+  },
+  "Rules baseline": {
+    "n": 40,
+    "tp": 16,
+    "fp": 0,
+    "fn": 4,
+    "tn": 20,
+    "accuracy": 0.9,
+    "precision": 1.0,
+    "recall": 0.8,
+    "f1": 0.888888888888889,
+    "accuracy_high_conf": 0.9705882352941176,
+    "high_conf_correct": 33,
+    "high_conf_total": 34,
+    "accuracy_low_conf": 0.5,
+    "low_conf_correct": 3,
+    "low_conf_total": 6,
+    "disagreements": [
+      {
+        "id": "03",
+        "mine": "YES",
+        "classifier": "NO",
+        "type": "false negative",
+        "reason": "explicitly reports no loss / precautionary only",
+        "snippet": "A container vessel has run aground off Sri Lanka; salvage tugs are en route and no oil spill has been reported so far.",
+        "notes": null
+      },
+      {
+        "id": "18",
+        "mine": "YES",
+        "classifier": "NO",
+        "type": "false negative",
+        "reason": "explicitly reports no loss / precautionary only",
+        "snippet": "A cargo plane made an emergency landing in Anchorage after an engine fire warning; the aircraft landed safely with no injuries.",
+        "notes": {
+          "verdict": "Resolved by the rubric amendment",
+          "why": "Two clauses applied at once: an aircraft asset casualty, and a precautionary response with no confirmed damage. The rubric gave no precedence rule, so the model had licence to pick either.",
+          "assessment": "Mine, but narrowly. An unscheduled engine-warning landing reliably produces a boroscope inspection, often an engine change, plus diversion and repositioning costs. Those are aviation claims and they do not depend on injuries.",
+          "tells_us": "A rubric gap rather than a model failure. This is also the one snippet whose label was unstable across three identical runs, because the rubric genuinely left the model on the fence. v2 now agrees with me, but I do not claim the amendment deterministically fixed it: one snippet at n=40 sits inside the measured noise. The precedence rule remains the real fix."
+        }
+      },
+      {
+        "id": "26",
+        "mine": "YES",
+        "classifier": "NO",
+        "type": "false negative",
+        "reason": "explicitly reports no loss / precautionary only",
+        "snippet": "A ferry carrying 200 passengers lost engine power in the Aegean and was towed to port; no injuries were reported.",
+        "notes": null
+      },
+      {
+        "id": "33",
+        "mine": "YES",
+        "classifier": "NO",
+        "type": "false negative",
+        "reason": "explicitly reports no loss / precautionary only",
+        "snippet": "A dam in Laos showed cracks after heavy rain and authorities evacuated downstream villages as a precaution; engineers are assessing the structure.",
+        "notes": {
+          "verdict": "Genuinely contested",
+          "why": "The model collapsed 'damage' into 'loss has crystallised'. Nothing has failed, engineers are still assessing, so it reached for the precaution clause.",
+          "assessment": "Mine, on the rubric as written: cracks are confirmed physical damage to an insured structure, and evacuation costs are already being incurred. But this is genuinely 50/50 and I am the least certain party here of the three.",
+          "tells_us": "A rubric gap. My rubric never defines whether 'damage' means damage to the asset (cracks qualify) or a resulting loss (nothing yet). Both readings are available in the text, which is why two careful readers split. It also argues for a WATCH tier instead of forcing a binary."
+        }
+      }
+    ]
+  }
+}

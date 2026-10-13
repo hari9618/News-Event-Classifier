@@ -1,0 +1,41 @@
+id,label,confidence,justification
+01,YES,HIGH,
+02,NO,HIGH,
+03,YES,HIGH,
+04,NO,HIGH,
+05,YES,HIGH,
+06,NO,HIGH,
+07,NO,HIGH,
+08,YES,HIGH,
+09,YES,LOW,"One eyewitness and the operator hasn't confirmed anything. Right kind of event, thin sourcing."
+10,NO,HIGH,
+11,YES,HIGH,
+12,NO,HIGH,
+13,YES,HIGH,
+14,NO,HIGH,
+15,NO,HIGH,
+16,YES,HIGH,
+17,NO,LOW,"Real insurance loss, but it's a court ruling on something historical, not a new event. Scope call, could go the other way."
+18,YES,LOW,"Landed safely, but an engine fire warning usually means engine damage plus diversion costs."
+19,NO,HIGH,
+20,YES,HIGH,
+21,NO,HIGH,
+22,YES,HIGH,
+23,NO,HIGH,
+24,NO,HIGH,
+25,YES,HIGH,
+26,YES,LOW,"Towage and machinery damage make it a claim, though it may be small enough to sit under the deductible."
+27,YES,HIGH,
+28,NO,HIGH,
+29,YES,HIGH,
+30,NO,HIGH,
+31,YES,HIGH,
+32,NO,HIGH,
+33,YES,LOW,"Cracks are damage and villages are already evacuated, but the dam hasn't failed. Least comfortable YES in the set."
+34,NO,HIGH,
+35,YES,HIGH,
+36,NO,HIGH,
+37,YES,HIGH,
+38,NO,LOW,"No misuse detected so probably no claim, but notification costs alone can trigger a cyber policy. Weakest NO here."
+39,YES,HIGH,
+40,NO,HIGH,

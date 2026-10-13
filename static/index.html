@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leadenhall News Event Classifier</title>
+<style>
+  :root {
+    --bg: #0f172a; --panel: #1e293b; --line: #334155;
+    --text: #e2e8f0; --muted: #94a3b8;
+    --yes: #22c55e; --no: #64748b; --accent: #38bdf8; --warn: #fbbf24;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  header { border-bottom: 1px solid var(--line); padding: 22px 28px; }
+  h1 { margin: 0; font-size: 17px; letter-spacing: .14em; text-transform: uppercase; }
+  .sub { color: var(--muted); font-size: 13px; margin-top: 5px; }
+  nav { display: flex; gap: 8px; padding: 16px 28px 0; }
+  nav button {
+    background: none; border: 1px solid var(--line); color: var(--muted);
+    padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 13px;
+  }
+  nav button.active { color: var(--bg); background: var(--accent); border-color: var(--accent); font-weight: 600; }
+  main { max-width: 900px; margin: 0 auto; padding: 26px 28px 60px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 22px; }
+  label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  textarea {
+    width: 100%; min-height: 120px; resize: vertical; padding: 13px;
+    background: #0b1220; color: var(--text); border: 1px solid var(--line);
+    border-radius: 8px; font: inherit;
+  }
+  textarea:focus { outline: none; border-color: var(--accent); }
+  .row { display: flex; gap: 10px; align-items: center; margin-top: 14px; flex-wrap: wrap; }
+  #go {
+    background: var(--accent); color: #04121c; border: none; font-weight: 700;
+    padding: 11px 30px; border-radius: 7px; cursor: pointer; letter-spacing: .06em;
+  }
+  #goBatch {
+    background: var(--accent); color: #04121c; border: none; font-weight: 700;
+    padding: 9px 20px; border-radius: 7px; cursor: pointer; letter-spacing: .06em; font-size: 13px;
+  }
+  #go:disabled, #goBatch:disabled { opacity: .45; cursor: default; }
+  .chip {
+    background: none; border: 1px solid var(--line); color: var(--muted);
+    padding: 6px 11px; border-radius: 20px; cursor: pointer; font-size: 12px;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--accent); }
+  #result { margin-top: 20px; display: none; }
+  .verdict { font-size: 42px; font-weight: 800; letter-spacing: .04em; line-height: 1; }
+  .verdict.YES { color: var(--yes); }
+  .verdict.NO { color: var(--no); }
+  .conf { font-size: 12px; letter-spacing: .12em; margin-top: 10px; color: var(--muted); }
+  .conf.LOW { color: var(--warn); }
+  .reason { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .meta { color: var(--muted); font-size: 12px; margin-top: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 22px; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+  .stat .k { color: var(--muted); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+  .stat .v { font-size: 27px; font-weight: 700; margin-top: 6px; }
+  h2 { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 26px 0 12px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid var(--line); padding: 9px 12px; text-align: left; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; }
+  td.n { text-align: center; font-variant-numeric: tabular-nums; }
+  .hit { color: var(--yes); font-weight: 700; }
+  .miss { color: #f87171; font-weight: 700; }
+  select { background: #0b1220; color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px; font: inherit; }
+  .note { color: var(--muted); font-size: 13px; margin-top: 10px; }
+  tr.pick { cursor: pointer; }
+  tr.pick:hover td { background: #24344b; }
+  tr.pick.on td { background: #24344b; }
+  .detail { margin-top: 16px; border: 1px solid var(--line); border-radius: 10px; padding: 20px; background: var(--panel); }
+  .detail h3 { margin: 0 0 4px; font-size: 20px; }
+  .detail .snip { color: var(--muted); font-size: 13px; font-style: italic; margin-bottom: 16px; }
+  .pair { display: flex; gap: 34px; margin-bottom: 18px; flex-wrap: wrap; }
+  .pair div span { display: block; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .pair div b { font-size: 17px; }
+  .block { margin-top: 14px; }
+  .block span { display: block; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 5px; }
+  .verdict-tag { display: inline-block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+                 border: 1px solid var(--line); border-radius: 20px; padding: 4px 12px; color: var(--warn); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Leadenhall News Event Classifier</h1>
+  <div class="sub">Does this news item describe an event that could produce an insurance loss?</div>
+</header>
+
+<nav>
+  <button id="tab-classify" class="active" onclick="show('classify')">Classify</button>
+  <button id="tab-evaluation" onclick="show('evaluation')">Evaluation</button>
+</nav>
+
+<main>
+  <!-- ---------- CLASSIFY ---------- -->
+  <section id="classify">
+    <div class="card">
+      <label for="snippet">Paste a news snippet</label>
+      <textarea id="snippet" placeholder="A fire has destroyed a chemical storage warehouse on the outskirts of Rotterdam; two workers were injured and nearby residents evacuated."></textarea>
+      <div class="row">
+        <button id="go" onclick="classify()">CLASSIFY</button>
+        <button class="chip" onclick="fill(0)">fire example</button>
+        <button class="chip" onclick="fill(1)">forecast example</button>
+        <button class="chip" onclick="fill(2)">grounding example</button>
+        <button class="chip" onclick="fill(3)">market news example</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <label for="csvfile">Or upload a CSV of snippets (columns: <code>id</code>, <code>snippet</code>) — max 50 rows</label>
+      <div class="row" style="margin-top:0">
+        <input type="file" id="csvfile" accept=".csv,text/csv" onchange="pickFile()">
+        <button id="goBatch" onclick="runBatch()" disabled>CLASSIFY CSV</button>
+      </div>
+      <div id="batchStatus" class="meta"></div>
+      <div id="batchWrap" style="display:none; overflow-x:auto; margin-top:14px">
+        <table id="batchTable"></table>
+      </div>
+    </div>
+
+    <div id="result" class="card">
+      <div id="verdict" class="verdict"></div>
+      <div id="conf" class="conf"></div>
+      <div id="reason" class="reason"></div>
+      <div id="meta" class="meta"></div>
+    </div>
+  </section>
+
+  <!-- ---------- EVALUATION ---------- -->
+  <section id="evaluation" style="display:none">
+    <div class="row" style="margin:0 0 18px">
+      <label style="margin:0">System</label>
+      <select id="system" onchange="renderMetrics()"></select>
+    </div>
+
+    <div class="grid">
+      <div class="stat"><div class="k">Accuracy</div><div class="v" id="m-acc">-</div></div>
+      <div class="stat"><div class="k">Precision</div><div class="v" id="m-prec">-</div></div>
+      <div class="stat"><div class="k">Recall</div><div class="v" id="m-rec">-</div></div>
+      <div class="stat"><div class="k">F1</div><div class="v" id="m-f1">-</div></div>
+    </div>
+
+    <h2>Confusion matrix (YES = insurable loss event)</h2>
+    <table>
+      <tr><th></th><th>Actual YES</th><th>Actual NO</th></tr>
+      <tr><th>Predicted YES</th><td class="n hit" id="c-tp">-</td><td class="n miss" id="c-fp">-</td></tr>
+      <tr><th>Predicted NO</th><td class="n miss" id="c-fn">-</td><td class="n hit" id="c-tn">-</td></tr>
+    </table>
+    <div class="note" id="conf-split"></div>
+
+    <h2>All systems</h2>
+    <table id="compare"></table>
+    <div class="note">
+      The no-rubric row is an ablation: same model, same data, rubric removed from the prompt.
+      The gap between it and the top row is what the rubric is worth.
+    </div>
+
+    <h2>Disagreements with my labels</h2>
+    <table id="disagreements"></table>
+    <div class="note">Select a row to read the analysis.</div>
+    <div id="detail"></div>
+  </section>
+</main>
+
+<script>
+const EXAMPLES = [
+  "A fire has destroyed a chemical storage warehouse on the outskirts of Rotterdam; two workers were injured and nearby residents evacuated.",
+  "A tropical depression formed in the Gulf of Mexico and is forecast to strengthen into a hurricane within 72 hours.",
+  "A container vessel has run aground off Sri Lanka; salvage tugs are en route and no oil spill has been reported so far.",
+  "Shares in a major European reinsurer fell 4% after analysts downgraded the sector on pricing concerns."
+];
+let METRICS = null;
+
+function show(tab) {
+  for (const t of ["classify", "evaluation"]) {
+    document.getElementById(t).style.display = (t === tab) ? "block" : "none";
+    document.getElementById("tab-" + t).classList.toggle("active", t === tab);
+  }
+  if (tab === "evaluation" && !METRICS) loadMetrics();
+}
+
+function fill(i) { document.getElementById("snippet").value = EXAMPLES[i]; }
+
+async function classify() {
+  const text = document.getElementById("snippet").value.trim();
+  if (!text) {
+    document.getElementById("result").style.display = "block";
+    document.getElementById("verdict").textContent = "";
+    document.getElementById("conf").textContent = "";
+    document.getElementById("reason").textContent =
+      "Paste a snippet above, or use the CSV upload below for a batch.";
+    document.getElementById("meta").textContent = "";
+    return;
+  }
+  const btn = document.getElementById("go");
+  btn.disabled = true; btn.textContent = "CLASSIFYING...";
+  try {
+    const res = await fetch("/api/classify", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({text})
+    });
+    const d = await res.json();
+    document.getElementById("result").style.display = "block";
+    if (d.error) {                       // missing key, API down, empty input
+      document.getElementById("verdict").textContent = "ERROR";
+      document.getElementById("verdict").className = "verdict NO";
+      document.getElementById("conf").textContent = "";
+      document.getElementById("reason").textContent = d.error;
+      document.getElementById("meta").textContent = "";
+      return;
+    }
+    document.getElementById("verdict").textContent = d.label;
+    document.getElementById("verdict").className = "verdict " + d.label;
+    document.getElementById("conf").textContent = d.confidence + " CONFIDENCE";
+    document.getElementById("conf").className = "conf " + d.confidence;
+    document.getElementById("reason").textContent = d.reason;
+    document.getElementById("meta").textContent =
+      (d.category || "-") + "  ·  " + d.model;
+  } finally {
+    btn.disabled = false; btn.textContent = "CLASSIFY";
+  }
+}
+
+// Minimal CSV parser: handles quoted fields and embedded commas, which news text has.
+function parseCSV(text) {
+  const rows = [];
+  let row = [], field = "", inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQuotes) {
+      if (ch === '"' && text[i + 1] === '"') { field += '"'; i++; }
+      else if (ch === '"') inQuotes = false;
+      else field += ch;
+    } else if (ch === '"') inQuotes = true;
+    else if (ch === ",") { row.push(field); field = ""; }
+    else if (ch === "\n") { row.push(field); rows.push(row); row = []; field = ""; }
+    else if (ch !== "\r") field += ch;
+  }
+  if (field.length || row.length) { row.push(field); rows.push(row); }
+  return rows.filter(r => r.some(c => c.trim() !== ""));
+}
+
+function pickFile() {
+  const f = document.getElementById("csvfile").files[0];
+  const btn = document.getElementById("goBatch");
+  btn.disabled = !f;
+  document.getElementById("batchStatus").textContent =
+    f ? `${f.name} ready - click CLASSIFY CSV` : "";
+}
+
+async function runBatch() {
+  const file = document.getElementById("csvfile").files[0];
+  const status = document.getElementById("batchStatus");
+  const btn = document.getElementById("goBatch");
+  if (!file) { status.textContent = "Choose a CSV file first."; return; }
+
+  btn.disabled = true;
+  const original = btn.textContent;
+  btn.textContent = "CLASSIFYING...";
+  try {
+    const rows = parseCSV(await file.text());
+    if (!rows.length) { status.textContent = "That file appears to be empty."; return; }
+
+    const header = rows.shift().map(h => h.trim().toLowerCase());
+    const snIdx = header.indexOf("snippet"), idIdx = header.indexOf("id");
+    if (snIdx === -1) {
+      status.textContent = `No 'snippet' column found. Columns seen: ${header.join(", ") || "none"}`;
+      return;
+    }
+
+    const payload = rows.map((r, n) => ({
+      id: idIdx === -1 ? String(n + 1) : (r[idIdx] || "").trim(),
+      snippet: (r[snIdx] || "").trim()
+    })).filter(r => r.snippet);
+    if (!payload.length) { status.textContent = "No non-empty snippets found in that file."; return; }
+
+    status.textContent = `classifying ${payload.length} snippet(s) - this can take a minute...`;
+    document.getElementById("batchWrap").style.display = "none";
+
+    const res = await fetch("/api/classify_batch", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({rows: payload})
+    });
+    if (!res.ok) { status.textContent = `Server returned ${res.status}.`; return; }
+    const d = await res.json();
+    if (d.error && !(d.results || []).length) { status.textContent = d.error; return; }
+
+    status.textContent = `${d.results.length} classified - ${d.yes} YES, ${d.no} NO`
+      + (d.truncated ? " (input truncated to the first 50 rows)" : "")
+      + (d.error ? `  |  stopped early: ${d.error}` : "");
+    document.getElementById("batchTable").innerHTML =
+      `<tr><th>ID</th><th>Label</th><th>Conf</th><th>Rubric clause</th><th>Reason</th><th>Snippet</th></tr>`
+      + d.results.map(r => `<tr>
+          <td class="n">${r.id}</td>
+          <td class="n" style="color:${r.label === "YES" ? "var(--yes)" : "var(--no)"};font-weight:700">${r.label}</td>
+          <td class="n">${r.confidence}</td>
+          <td>${r.category}</td>
+          <td>${r.reason}</td>
+          <td>${r.snippet}</td>
+        </tr>`).join("");
+    document.getElementById("batchWrap").style.display = "block";
+  } catch (e) {
+    status.textContent = `Could not read that file: ${e.message}`;
+  } finally {
+    btn.textContent = original;
+    btn.disabled = false;
+    // allow re-selecting the same file
+    document.getElementById("csvfile").value = "";
+  }
+}
+
+async function loadMetrics() {
+  METRICS = await (await fetch("/api/metrics")).json();
+  const sel = document.getElementById("system");
+  sel.innerHTML = Object.keys(METRICS).map(k => `<option>${k}</option>`).join("");
+  renderCompare();
+  renderMetrics();
+}
+
+const pct = x => (x * 100).toFixed(1) + "%";
+
+function renderMetrics() {
+  const m = METRICS[document.getElementById("system").value];
+  document.getElementById("m-acc").textContent = pct(m.accuracy);
+  document.getElementById("m-prec").textContent = pct(m.precision);
+  document.getElementById("m-rec").textContent = pct(m.recall);
+  document.getElementById("m-f1").textContent = pct(m.f1);
+  for (const k of ["tp", "fp", "fn", "tn"]) document.getElementById("c-" + k).textContent = m[k];
+
+  document.getElementById("conf-split").textContent =
+    `On the ${m.high_conf_total} snippets I labelled HIGH confidence it agrees ` +
+    `${m.high_conf_correct}/${m.high_conf_total}; on the ${m.low_conf_total} I marked LOW, ` +
+    `${m.low_conf_correct}/${m.low_conf_total}. Errors concentrate where my own rubric is thin.`;
+
+  DISAGREEMENTS = m.disagreements;
+  const rows = m.disagreements.map((d, i) => `
+    <tr class="pick" id="dis${i}" onclick="showDetail(${i})">
+      <td class="n">${d.id}</td>
+      <td class="n">${d.mine}</td>
+      <td class="n">${d.classifier}</td>
+      <td>${d.type}</td>
+      <td>${d.snippet}</td>
+    </tr>`).join("");
+  document.getElementById("disagreements").innerHTML =
+    `<tr><th>ID</th><th>Human</th><th>Model</th><th>Error</th><th>Snippet</th></tr>` +
+    (rows || `<tr><td colspan="5">No disagreements.</td></tr>`);
+  document.getElementById("detail").innerHTML = "";
+  if (m.disagreements.length) showDetail(0);
+}
+
+let DISAGREEMENTS = [];
+
+function showDetail(i) {
+  const d = DISAGREEMENTS[i];
+  if (!d) return;
+  DISAGREEMENTS.forEach((_, n) => {
+    const row = document.getElementById("dis" + n);
+    if (row) row.classList.toggle("on", n === i);
+  });
+  const n = d.notes;
+  document.getElementById("detail").innerHTML = `
+    <div class="detail">
+      <h3>Snippet ${d.id}</h3>
+      <div class="snip">"${d.snippet}"</div>
+      <div class="pair">
+        <div><span>Human label</span><b>${d.mine}</b></div>
+        <div><span>Model</span><b>${d.classifier}</b></div>
+        <div><span>Error type</span><b>${d.type}</b></div>
+      </div>
+      ${n ? `<div class="verdict-tag">${n.verdict}</div>` : ""}
+      <div class="block"><span>Model's stated reason</span>${d.reason || "-"}</div>
+      ${n ? `
+        <div class="block"><span>Why the disagreement?</span>${n.why}</div>
+        <div class="block"><span>My final assessment</span>${n.assessment}</div>
+        <div class="block"><span>What this tells us</span>${n.tells_us}</div>` : ""}
+    </div>`;
+}
+
+function renderCompare() {
+  const rows = Object.entries(METRICS).map(([name, m]) => `
+    <tr>
+      <td>${name}</td>
+      <td class="n">${pct(m.accuracy)}</td>
+      <td class="n">${pct(m.precision)}</td>
+      <td class="n">${pct(m.recall)}</td>
+      <td class="n">${pct(m.f1)}</td>
+      <td class="n">${m.fp}</td>
+      <td class="n">${m.fn}</td>
+    </tr>`).join("");
+  document.getElementById("compare").innerHTML =
+    `<tr><th>System</th><th>Acc</th><th>Prec</th><th>Recall</th><th>F1</th>
+     <th>False pos</th><th>False neg</th></tr>` + rows;
+}
+</script>
+</body>
+</html>

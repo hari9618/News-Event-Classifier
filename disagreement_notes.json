@@ -1,0 +1,20 @@
+{
+  "25": {
+    "verdict": "Classifier is wrong",
+    "why": "The model invoked the 'no meaningful loss' clause, which requires the snippet to explicitly state there was no loss. Snippet 25 says nothing of the kind. It read the absence of a stated loss as a statement of no loss.",
+    "assessment": "Mine, clearly. The slow-onset clause is directly on point: the effects are already occurring, with reservoirs at 30% of capacity and irrigation restrictions in force. Drought with enforced restrictions is exactly what crop and parametric agricultural covers respond to.",
+    "tells_us": "A classifier error, with a secondary rubric problem. The slow-onset rule sits under 'Borderline cases' rather than in the YES list, so a reader working top-down meets 'no meaningful loss' first and stops there. Promoting it to a full YES bullet is the fix."
+  },
+  "33": {
+    "verdict": "Genuinely contested",
+    "why": "The model collapsed 'damage' into 'loss has crystallised'. Nothing has failed, engineers are still assessing, so it reached for the precaution clause.",
+    "assessment": "Mine, on the rubric as written: cracks are confirmed physical damage to an insured structure, and evacuation costs are already being incurred. But this is genuinely 50/50 and I am the least certain party here of the three.",
+    "tells_us": "A rubric gap. My rubric never defines whether 'damage' means damage to the asset (cracks qualify) or a resulting loss (nothing yet). Both readings are available in the text, which is why two careful readers split. It also argues for a WATCH tier instead of forcing a binary."
+  },
+  "18": {
+    "verdict": "Resolved by the rubric amendment",
+    "why": "Two clauses applied at once: an aircraft asset casualty, and a precautionary response with no confirmed damage. The rubric gave no precedence rule, so the model had licence to pick either.",
+    "assessment": "Mine, but narrowly. An unscheduled engine-warning landing reliably produces a boroscope inspection, often an engine change, plus diversion and repositioning costs. Those are aviation claims and they do not depend on injuries.",
+    "tells_us": "A rubric gap rather than a model failure. This is also the one snippet whose label was unstable across three identical runs, because the rubric genuinely left the model on the fence. v2 now agrees with me, but I do not claim the amendment deterministically fixed it: one snippet at n=40 sits inside the measured noise. The precedence rule remains the real fix."
+  }
+}

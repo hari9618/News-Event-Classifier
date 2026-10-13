@@ -1,0 +1,41 @@
+id,predicted,reason
+01,YES,peril present with reported impact
+02,NO,non-event topic: market/financial commentary
+03,NO,explicitly reports no loss / precautionary only
+04,NO,non-event topic: labour/insolvency
+05,YES,peril present with reported impact
+06,NO,non-event topic: research
+07,NO,"forward-looking hazard, no impact reported"
+08,YES,peril present with reported impact
+09,YES,peril present with reported impact
+10,NO,non-event topic: regulation/legal/policy
+11,YES,peril present with reported impact
+12,NO,non-event topic: corporate finance
+13,YES,peril present with reported impact
+14,NO,"forward-looking hazard, no impact reported"
+15,NO,explicitly reports no loss / precautionary only
+16,YES,peril present with reported impact
+17,NO,non-event topic: regulation/legal/policy
+18,NO,explicitly reports no loss / precautionary only
+19,NO,non-event topic: market/financial commentary
+20,YES,peril present with reported impact
+21,NO,explicitly reports no loss / precautionary only
+22,YES,peril present with reported impact
+23,NO,"forward-looking hazard, no impact reported"
+24,NO,explicitly reports no loss / precautionary only
+25,YES,peril present with reported impact
+26,NO,explicitly reports no loss / precautionary only
+27,YES,peril present with reported impact
+28,NO,non-event topic: regulation/legal/policy
+29,YES,peril present with reported impact
+30,NO,no peril-plus-impact evidence
+31,YES,peril present with reported impact
+32,NO,non-event topic: research
+33,NO,explicitly reports no loss / precautionary only
+34,NO,non-event topic: market/financial commentary
+35,YES,peril present with reported impact
+36,NO,non-event topic: labour/insolvency
+37,YES,peril present with reported impact
+38,NO,explicitly reports no loss / precautionary only
+39,YES,peril present with reported impact
+40,NO,non-event topic: regulation/legal/policy
